@@ -1,7 +1,7 @@
 from typing import List, Dict, Optional
 from pathlib import Path
 import numpy as np
-from sentence_transformers import SentenceTransformer
+import os
 from ..utils.settings import get_settings
 from ..utils.logging import get_logger
 
@@ -17,15 +17,25 @@ logger = get_logger()
 class VectorStore:
     def __init__(self):
         self.settings = get_settings()
-        self.model = SentenceTransformer(self.settings.embedding_model)
+        self._light = bool(os.environ.get("LIGHTWEIGHT_EMBEDDINGS"))
+        self.model = None
+        if not self._light:
+            # Lazy import to avoid heavy dependency during fast tests
+            from sentence_transformers import SentenceTransformer  # type: ignore
+            self.model = SentenceTransformer(self.settings.embedding_model)
         self.index = None
         self.jobs: List[Dict] = []
         self.embeddings: Optional[np.ndarray] = None  # fallback store
 
     def build(self, jobs: List[Dict]):
         texts = [self._job_text(j) for j in jobs]
-        embeddings = self.model.encode(texts, show_progress_bar=False, convert_to_numpy=True)
-        if _FAISS_AVAILABLE:
+        if self._light:
+            embeddings = self._hash_embed(texts)
+            self.embeddings = embeddings
+            self.index = None
+        else:
+            embeddings = self.model.encode(texts, show_progress_bar=False, convert_to_numpy=True)
+        if not self._light and _FAISS_AVAILABLE:
             dim = embeddings.shape[1]
             self.index = faiss.IndexFlatIP(dim)
             faiss.normalize_L2(embeddings)
@@ -45,7 +55,7 @@ class VectorStore:
         path.parent.mkdir(parents=True, exist_ok=True)
         meta = np.array(self.jobs, dtype=object)
         np.save(str(path) + "_jobs.npy", meta, allow_pickle=True)
-        if not _FAISS_AVAILABLE or self.index is None:
+        if self._light or (not _FAISS_AVAILABLE) or self.index is None:
             return  # skip FAISS index persistence
         faiss.write_index(self.index, str(path))
 
@@ -78,8 +88,11 @@ class VectorStore:
     def search(self, query: str, k: int = 5) -> List[Dict]:
         if self.index is None and self.embeddings is None:
             raise RuntimeError("Index not initialized")
-        q_emb = self.model.encode([query], convert_to_numpy=True)
-        if _FAISS_AVAILABLE and self.index is not None:
+            if self._light:
+                q_emb = self._hash_embed([query])
+            else:
+                q_emb = self.model.encode([query], convert_to_numpy=True)
+            if not self._light and _FAISS_AVAILABLE and self.index is not None:
             faiss.normalize_L2(q_emb)
             scores, idxs = self.index.search(q_emb, k)
             pairs = list(zip(scores[0], idxs[0]))
@@ -100,3 +113,14 @@ class VectorStore:
     @staticmethod
     def _job_text(job: Dict) -> str:
         return f"{job['title']} {job['company']} {job['location']} {job['type']} {' '.join(job.get('skills_list', []))} {job['description']}"
+
+    @staticmethod
+    def _hash_embed(texts: List[str], dim: int = 128) -> np.ndarray:
+        """Simple, fast hashing-based embedding for tests/CI."""
+        vecs = np.zeros((len(texts), dim), dtype=np.float32)
+        for i, t in enumerate(texts):
+            for tok in t.lower().split():
+                h = (hash(tok) % dim)
+                vecs[i, h] += 1.0
+        norms = np.linalg.norm(vecs, axis=1, keepdims=True) + 1e-9
+        return vecs / norms
