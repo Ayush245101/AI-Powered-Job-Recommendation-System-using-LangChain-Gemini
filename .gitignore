@@ -1,0 +1,21 @@
+# Environments
+.venv/
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Data & cache
+data/vector_store.faiss
+**/*_jobs.npy
+
+# Notebooks
+.ipynb_checkpoints/
+
+# OS/editor
+.DS_Store
+.vscode/

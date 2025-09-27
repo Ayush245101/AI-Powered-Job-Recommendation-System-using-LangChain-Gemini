@@ -1,0 +1,16 @@
+- [x] Clarify Project Requirements
+	- Goal: AI job recommendation Streamlit app using LangChain + Gemini with RAG (resume + skills -> retrieval -> LLM ranking).
+- [x] Scaffold the Project
+	- Created directories (src modules, data, docs, notebooks, tests, .github) and core files (app, pipeline, retrieval, ingestion, utils, sample dataset, README, env example, report template, placeholder notebook, test).
+ - [x] Customize the Project
+	 - Added PDF parsing, FAISS fallback, offline heuristic recommender, improved retrieval size, fallback messaging, requirements updated.
+- [x] Install Required Extensions
+  - None recommended; skipping.
+ - [x] Compile the Project
+	 - Dependencies installed, settings refactored for pydantic v2, vector store build + retrieval + fallback recommendations smoke-tested.
+- [x] Create and Run Task
+  - Added VS Code task for Streamlit; tests added & passing.
+- [x] Launch the Project
+	- Streamlit app runnable via task or `streamlit run app.py`; heuristic mode works without GEMINI_API_KEY.
+- [x] Ensure Documentation is Complete
+	- README updated (fallback, task usage). Report template scaffolded. Instructions checklist finalized.

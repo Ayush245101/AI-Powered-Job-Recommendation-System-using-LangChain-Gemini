@@ -1,0 +1,11 @@
+id,title,company,location,type,skills,description
+1,Data Science Intern,Insight Analytics,Remote,Internship,"python;statistics;machine learning;sql","Assist with building predictive models and exploratory data analysis."
+2,Backend Engineer,Pilot Systems,Bangalore,Full-Time,"python;apis;django;sql","Develop scalable REST APIs and microservices."
+3,NLP Research Intern,Alpha Labs,Remote,Internship,"python;nlp;transformers;machine learning","Work on transformer-based text classification and evaluation."
+4,AI Engineer,Visionary Tech,Delhi,Full-Time,"python;mlops;machine learning;docker","Deploy and monitor ML models in production."
+5,Product Data Analyst,MarketPulse,Mumbai,Full-Time,"sql;tableau;analytics;python","Analyze product usage data to generate insights."
+6,ML Ops Intern,DeployAI,Remote,Internship,"python;mlops;docker;ci/cd","Support CI/CD pipelines for model deployment."
+7,Generative AI Engineer,CreativeMind,Remote,Full-Time,"python;llms;prompt engineering;nlp","Build and optimize generative AI workflows and prompt strategies."
+8,Junior Data Engineer,FlowData,Bangalore,Full-Time,"python;etl;airflow;sql","Maintain data pipelines and ETL workflows."
+9,Computer Vision Intern,PixelCore,Remote,Internship,"python;opencv;deep learning;cnn","Assist in training CNN models for image recognition tasks."
+10,Research Assistant AI,NeuroNet Labs,Hyderabad,Internship,"python;research;machine learning;experimentation","Support experiments and data curation for academic AI projects."
