@@ -1,5 +1,7 @@
 # AI-Powered Job Recommendation System (LangChain + Gemini)
 
+![CI](https://github.com/Ayush245101/AI-Powered-Job-Recommendation-System-using-LangChain-Gemini/actions/workflows/ci.yml/badge.svg)
+
 ## Overview
 A Streamlit web application that recommends personalized jobs or internships to students by combining user input (skills, experience, preferences) and resume parsing with a Retrieval-Augmented Generation (RAG) pipeline powered by LangChain and Gemini.
 
