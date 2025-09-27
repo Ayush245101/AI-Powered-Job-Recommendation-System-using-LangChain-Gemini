@@ -1,5 +1,8 @@
 import os
 import pytest
+
+# Ensure tests never download large models
+os.environ.setdefault("LIGHTWEIGHT_EMBEDDINGS", "1")
 from src.ingestion.load_jobs import load_jobs
 from src.retrieval.vector_store import VectorStore
 from src.pipeline.recommend import recommend
