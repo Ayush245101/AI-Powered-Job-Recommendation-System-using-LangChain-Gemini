@@ -1,7 +1,6 @@
 # CI requirements: exclude heavy optional deps (faiss-cpu, sentence-transformers)
 streamlit>=1.37.0
-langchain>=0.2.0
-langchain-google-genai>=1.0.0
+google-generativeai>=0.8.2
 python-dotenv>=1.0.0
 pydantic>=2.7.0
 pydantic-settings>=2.3.0

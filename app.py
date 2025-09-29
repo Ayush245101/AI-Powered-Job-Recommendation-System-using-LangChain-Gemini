@@ -1,4 +1,5 @@
 import streamlit as st
+from datetime import date, datetime
 from pathlib import Path
 from src.utils.settings import get_settings
 from src.ingestion.load_jobs import load_jobs
@@ -26,6 +27,10 @@ def main():
         manual_skills = st.text_area("Skills (comma-separated)")
         location_pref = st.text_input("Preferred Location (optional)")
         job_type_pref = st.selectbox("Job Type Preference", ["", "Internship", "Full-Time"])  # simple filter
+        st.divider()
+        st.subheader("Filters")
+        hide_closed = st.checkbox("Hide closed roles", value=False)
+        only_closing_soon = st.checkbox("Only show closing soon (≤ 7 days)", value=False)
         submit = st.button("Get Recommendations")
 
     jobs = load_jobs()
@@ -67,9 +72,64 @@ def main():
             st.error("No recommendations produced.")
         else:
             st.subheader("Top Recommendations")
-            for i, r in enumerate(results, start=1):
-                st.markdown(f"**{i}. {r.get('title','?')} @ {r.get('company','?')}**")
-                st.caption(r.get('reason',''))
+            # helper to compute deadline state
+            def _deadline_state(r: dict):
+                expired = False; closing_soon = False; days_left = None
+                raw_deadline = (r.get('apply_by') or '').strip()
+                if raw_deadline:
+                    try:
+                        dl = datetime.strptime(raw_deadline, "%Y-%m-%d").date()
+                        today = date.today()
+                        if dl < today:
+                            expired = True
+                        else:
+                            days_left = (dl - today).days
+                            if days_left <= 7:
+                                closing_soon = True
+                    except Exception:
+                        pass
+                return expired, closing_soon, days_left
+
+            # apply filters
+            filtered = []
+            for r in results:
+                expired, closing_soon, days_left = _deadline_state(r)
+                if hide_closed and expired:
+                    continue
+                if only_closing_soon and not (closing_soon and not expired):
+                    continue
+                # store computed flags for reuse in rendering
+                r['_expired'] = expired; r['_closing_soon'] = closing_soon; r['_days_left'] = days_left
+                filtered.append(r)
+
+            if not filtered:
+                st.info("No results after applying filters.")
+                return
+
+            for i, r in enumerate(filtered, start=1):
+                title = r.get('title','?'); company = r.get('company','?')
+                st.markdown(f"**{i}. {title} @ {company}**")
+                # meta line with location/type and optional apply_by
+                meta_bits = []
+                if r.get('location'): meta_bits.append(r['location'])
+                if r.get('type'): meta_bits.append(r['type'])
+                # compute deadline state
+                expired = r.get('_expired', False); closing_soon = r.get('_closing_soon', False); days_left = r.get('_days_left')
+                raw_deadline = (r.get('apply_by') or '').strip()
+                if raw_deadline and r.get('_days_left') is None and not expired:
+                    # unknown format; show raw
+                    meta_bits.append(f"Apply by: {raw_deadline}")
+                if raw_deadline and not expired and days_left is not None:
+                    meta_bits.append(f"Apply by: {raw_deadline} ({days_left} days left)")
+                if expired:
+                    meta_bits.append("Applications closed")
+                if meta_bits:
+                    st.caption(" • ".join(meta_bits))
+                # reason and apply link
+                if r.get('reason'):
+                    st.write(r['reason'])
+                if r.get('apply_url') and not expired:
+                    st.link_button("Apply", r['apply_url'], help="Opens the application link in your browser")
             if not get_settings().gemini_api_key:
                 st.info("Using heuristic fallback (no GEMINI_API_KEY set). Add key to enable LLM reasoning.")
     else:

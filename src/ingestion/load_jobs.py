@@ -6,6 +6,7 @@ from ..utils.logging import get_logger
 logger = get_logger()
 
 REQUIRED_COLUMNS = ["id","title","company","location","type","skills","description"]
+OPTIONAL_COLUMNS = ["apply_url", "apply_by"]
 
 def load_jobs(csv_path: str = "data/sample_jobs.csv") -> List[Dict]:
     path = Path(csv_path)
@@ -16,6 +17,10 @@ def load_jobs(csv_path: str = "data/sample_jobs.csv") -> List[Dict]:
     if missing:
         raise ValueError(f"Dataset missing required columns: {missing}")
     df = df.fillna("")
+    # Ensure optional columns exist
+    for col in OPTIONAL_COLUMNS:
+        if col not in df.columns:
+            df[col] = ""
     # Normalize skills to list
     df["skills_list"] = df["skills"].apply(lambda s: [x.strip().lower() for x in str(s).split(';') if x.strip()])
     records = df.to_dict(orient="records")

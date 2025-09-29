@@ -1,14 +1,12 @@
 streamlit>=1.37.0
-langchain>=0.2.0
-langchain-google-genai>=1.0.0
 python-dotenv>=1.0.0
-faiss-cpu>=1.7.4  # optional on Windows; fallback provided if import fails
 pydantic>=2.7.0
+pydantic-settings>=2.3.0
 pandas>=2.2.0
 numpy>=1.26.0
 tqdm>=4.66.0
-sentence-transformers>=2.7.0
-protobuf<5.0.0  # for some google deps
+protobuf<5.0.0
 requests>=2.31.0
 pypdf>=4.2.0
 pytest>=8.2.0
+google-generativeai>=0.8.2
