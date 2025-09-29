@@ -1,6 +1,7 @@
 # AI-Powered Job Recommendation System (Streamlit + Gemini)
 
 ![CI](https://github.com/Ayush245101/AI-Powered-Job-Recommendation-System-using-LangChain-Gemini/actions/workflows/ci.yml/badge.svg)
+![Docker](https://github.com/Ayush245101/AI-Powered-Job-Recommendation-System-using-LangChain-Gemini/actions/workflows/docker-publish.yml/badge.svg)
 
 ## Overview
 A Streamlit web application that recommends personalized jobs or internships to students by combining user input (skills, experience, preferences) and resume parsing with a Retrieval-Augmented Generation (RAG) pipeline powered by a lightweight vector store and Google's Gemini.
@@ -89,6 +90,16 @@ docker run --rm -p 8501:8501 -e GEMINI_API_KEY=$Env:GEMINI_API_KEY ghcr.io/ayush
 ### Option C: Any VM / Render / Fly.io
 - Build with Dockerfile provided or run via Python directly
 - Expose port 8501; set `GEMINI_API_KEY` for LLM mode
+
+### Option D: Run directly on GitHub (Codespaces)
+1) Open this repo in Codespaces (Use this template → Open in Codespaces)
+2) The dev container installs Python dependencies automatically
+3) Start the app in the Codespaces terminal:
+  ```bash
+  export GEMINI_API_KEY=your_key   # optional
+  streamlit run app.py --server.port=8501 --server.address=0.0.0.0
+  ```
+4) Accept the forwarded port prompt to open the app in your browser
 
 ## Sample Input
 - Skills: Python, Machine Learning, NLP
