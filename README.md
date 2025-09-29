@@ -73,12 +73,12 @@ If `GEMINI_API_KEY` is not set the app will still work using a heuristic fallbac
 ### Option A: GitHub Container Registry (GHCR)
 This repo is configured to build and push a Docker image to GHCR on pushes to `main` (and tags `v*.*.*`).
 
-- Image name: `ghcr.io/<owner>/<repo>:<tag>` (e.g., `ghcr.io/Ayush245101/AI-Powered-Job-Recommendation-System-using-LangChain-Gemini:latest`)
+- Image name: `ghcr.io/<owner>/ai-powered-job-recommendation-system-using-langchain-gemini:<tag>` (e.g., `ghcr.io/ayush245101/ai-powered-job-recommendation-system-using-langchain-gemini:latest`)
 - Workflow file: `.github/workflows/docker-publish.yml`
 
 Run locally with Docker:
 ```powershell
-docker run --rm -p 8501:8501 -e GEMINI_API_KEY=$Env:GEMINI_API_KEY ghcr.io/Ayush245101/AI-Powered-Job-Recommendation-System-using-LangChain-Gemini:latest
+docker run --rm -p 8501:8501 -e GEMINI_API_KEY=$Env:GEMINI_API_KEY ghcr.io/ayush245101/ai-powered-job-recommendation-system-using-langchain-gemini:latest
 ```
 
 ### Option B: Streamlit Community Cloud
