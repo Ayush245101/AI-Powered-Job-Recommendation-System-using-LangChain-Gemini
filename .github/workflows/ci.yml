@@ -23,5 +23,6 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           LIGHTWEIGHT_EMBEDDINGS: "1"
+          PYTHONPATH: .
         run: |
           pytest -q
