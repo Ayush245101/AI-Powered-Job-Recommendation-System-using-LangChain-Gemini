@@ -86,6 +86,7 @@ docker run --rm -p 8501:8501 -e GEMINI_API_KEY=$Env:GEMINI_API_KEY ghcr.io/ayush
 1) Fork this repo
 2) Create a new app in Streamlit Cloud pointing to `app.py`
 3) Add a secret called `GEMINI_API_KEY` (if you want LLM ranking)
+  - In Streamlit Cloud → App → Settings → Secrets: add `GEMINI_API_KEY="your_key"`
 
 ### Option C: Any VM / Render / Fly.io
 - Build with Dockerfile provided or run via Python directly
@@ -100,6 +101,11 @@ docker run --rm -p 8501:8501 -e GEMINI_API_KEY=$Env:GEMINI_API_KEY ghcr.io/ayush
   streamlit run app.py --server.port=8501 --server.address=0.0.0.0
   ```
 4) Accept the forwarded port prompt to open the app in your browser
+
+Notes on Streamlit “on GitHub”
+- GitHub Actions runners are ephemeral; they aren’t suited to host a persistent Streamlit server.
+- Use Codespaces for an interactive session or Streamlit Community Cloud for hosting.
+- A `Streamlit Smoke Test` workflow is provided to verify the app boots on a runner.
 
 ## Sample Input
 - Skills: Python, Machine Learning, NLP
