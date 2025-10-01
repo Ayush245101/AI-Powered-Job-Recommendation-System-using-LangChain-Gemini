@@ -3,6 +3,8 @@
 ![CI](https://github.com/Ayush245101/AI-Powered-Job-Recommendation-System-using-LangChain-Gemini/actions/workflows/ci.yml/badge.svg)
 ![Docker](https://github.com/Ayush245101/AI-Powered-Job-Recommendation-System-using-LangChain-Gemini/actions/workflows/docker-publish.yml/badge.svg)
 
+GitHub Pages landing: https://ayush245101.github.io/AI-Powered-Job-Recommendation-System-using-LangChain-Gemini/
+
 ## Overview
 A Streamlit web application that recommends personalized jobs or internships to students by combining user input (skills, experience, preferences) and resume parsing with a Retrieval-Augmented Generation (RAG) pipeline powered by a lightweight vector store and Google's Gemini.
 
